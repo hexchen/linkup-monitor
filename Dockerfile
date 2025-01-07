@@ -5,5 +5,6 @@ RUN apt-get update && apt-get install -y python3 python3-requests python3-yaml p
 
 EXPOSE 8000
 
+WORKDIR /app
 COPY . .
 CMD ["python3", "main.py"]
