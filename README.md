@@ -1,4 +1,5 @@
 # todo
+- add configuration as parameter / environment to docker run
 - add pipeline
 - add build job
 - push image to docker.io
