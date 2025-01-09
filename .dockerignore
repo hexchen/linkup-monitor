@@ -1,1 +1,8 @@
 linkup_config.yaml
+.git/
+*.skel
+README.md
+local_build.sh
+.gitignore
+Dockerfile
+.dockerignore
