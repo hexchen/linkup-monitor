@@ -3,3 +3,5 @@ auth:
   account-id:
   email:
   password:
+measurement:
+  unit: 0  # 0: mmol/L; 1: mg/dL

@@ -26,6 +26,7 @@ class linkup:
             'email': config['auth']['email'] if config['auth']['email'] else '',
             'password': config['auth']['password'] if config['auth']['password'] else ''
         }
+        self.unit = config['measurement']['unit'] if config['measurement']['unit'] else 0
 
     def fetch_and_set_token(self):
         if 'authorization' in self.HEADERS:
@@ -61,7 +62,15 @@ class linkup:
         resp = requests.get(f"{self.URL}/llu/connections/{patient_id}/graph", headers=self.HEADERS)
         resp.raise_for_status()
         
-        return resp.json()['data']['connection']['glucoseMeasurement']
+        gm = resp.json()['data']['connection']['glucoseMeasurement']
+        
+        return {
+            'Value': gm['Value'] if self.unit == 0 else gm['ValueInMgPerDl'], 
+            'Timestamp': gm['Timestamp'],
+            'Unit': 'mmol/L' if self.unit == 0 else 'mg/dL'
+        }
+        
+        
         
 
 

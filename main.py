@@ -29,7 +29,7 @@ if __name__ == '__main__':
         while True:
             gm = llu.get_gcm_data(patient_id)
             glucoseGauge.set(gm['Value'])
-            print(f"Value: {gm['Value']} mmol/L ({gm['Timestamp']})")
+            print(f"Value: {gm['Value']} {gm['Unit']} ({gm['Timestamp']})")
             time.sleep(60)
     except KeyboardInterrupt:
         print("\nbye")
