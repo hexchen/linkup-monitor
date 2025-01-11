@@ -14,27 +14,30 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
-
-glucoseGauge = Gauge('glucose_measurement', 'glucose measurement in mmol/L')
-
 if __name__ == '__main__':
-    # Start up the server to expose the prometheus metrics
-    start_http_server(8000)
     
     with open('linkup_config.yaml', 'r') as f:
         config = yaml.safe_load(f)
+    
+    unit = "mmol/L" if config['measurement']['unit'] == 0 else "mg/dL"
+    glucoseGauge = Gauge('glucose_measurement', f'glucose measurement in {unit}')
+    boundaryGauge = Gauge('glucose_measurement_out_of_boundaries', 'glucose measurement is high or low')
     
     llu = linkup(config)
     llu.fetch_and_set_token()
     
     logging.debug("get patient id")
     patient_id = llu.get_patient_id()
+    
+    # Start up the server to expose the prometheus metrics
+    start_http_server(8000)
 
     logging.info("fetch GCM data")
     try:
         while True:
             gm = llu.get_gcm_data(patient_id)
             glucoseGauge.set(gm['Value'])
+            boundaryGauge.set(1 if gm['isHigh'] else -1 if gm['isLow'] else 0)
             logging.info(f"Value: {gm['Value']} {gm['Unit']} ({gm['Timestamp']})")
             time.sleep(60)
     except KeyboardInterrupt:

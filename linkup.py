@@ -63,11 +63,12 @@ class linkup:
         resp.raise_for_status()
         
         gm = resp.json()['data']['connection']['glucoseMeasurement']
-        
         return {
             'Value': gm['Value'] if self.unit == 0 else gm['ValueInMgPerDl'], 
             'Timestamp': gm['Timestamp'],
-            'Unit': 'mmol/L' if self.unit == 0 else 'mg/dL'
+            'Unit': 'mmol/L' if self.unit == 0 else 'mg/dL',
+            'isHigh': gm['isHigh'],
+            'isLow': gm['isLow']
         }
         
         
