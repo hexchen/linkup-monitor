@@ -67,14 +67,15 @@ class linkup:
     def get_gcm_data(self, patient_id):
         resp = requests.get(f"{self.URL}/llu/connections/{patient_id}/graph", headers=self.HEADERS)
         resp.raise_for_status()
-        
+
         gm = resp.json()['data']['connection']['glucoseMeasurement']
         return {
             'Value': gm['Value'] if self.unit == 0 else gm['ValueInMgPerDl'], 
             'Timestamp': gm['Timestamp'],
             'Unit': 'mmol/L' if self.unit == 0 else 'mg/dL',
             'isHigh': gm['isHigh'],
-            'isLow': gm['isLow']
+            'isLow': gm['isLow'],
+            'Trend': gm['TrendArrow'],
         }
         
         
