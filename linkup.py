@@ -70,8 +70,9 @@ class linkup:
 
         gm = resp.json()['data']['connection']['glucoseMeasurement']
         return {
-            'Value': gm['Value'] if self.unit == 0 else gm['ValueInMgPerDl'], 
-            'Timestamp': gm['Timestamp'],
+            'Value': gm['Value'] if self.unit == 0 else gm['ValueInMgPerDl'],
+            # use UTC timestamp so we don't have to deal with timezones
+            'Timestamp': gm['FactoryTimestamp'],
             'Unit': 'mmol/L' if self.unit == 0 else 'mg/dL',
             'isHigh': gm['isHigh'],
             'isLow': gm['isLow'],
