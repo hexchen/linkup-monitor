@@ -49,14 +49,20 @@ class linkup:
         account_id = account_id.hexdigest()
         self.HEADERS['account-id'] = account_id
 
-
-    def get_patient_id(self):
+    def get_patients(self):
         resp = requests.get(f"{self.URL}/llu/connections", headers=self.HEADERS)
         resp.raise_for_status()
-        
-        patient_id = resp.json()['data'][0]['patientId']
-        
-        return patient_id
+        data = resp.json()
+
+        patients = [{
+            'name': p['firstName'],
+            'id': p['patientId']
+        } for p in data['data']]
+
+        return patients
+
+    def get_patient_id(self):
+        return self.get_patients()[0]['id']
 
     def get_gcm_data(self, patient_id):
         resp = requests.get(f"{self.URL}/llu/connections/{patient_id}/graph", headers=self.HEADERS)
