@@ -29,7 +29,7 @@ class linkup:
         self.unit = config['measurement']['unit'] if config['measurement']['unit'] else 0
 
     def fetch_and_set_token(self):
-        if 'authorization' in self.HEADERS:
+        if self.HEADERS['authorization']:
             print("re-using token")
             return
         
